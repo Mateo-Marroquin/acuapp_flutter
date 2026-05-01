@@ -43,3 +43,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+.flutter-plugins
+.packages
+
+/android/local.properties
+
+.gradle/
+
+.web/
+
+.vscode/
