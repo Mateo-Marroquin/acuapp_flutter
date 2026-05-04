@@ -1,4 +1,4 @@
-import 'package:acuapp/category.dart';
+import 'package:acuapp/details.dart';
 import 'package:acuapp/widgets/marine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_earth_globe/globe_coordinates.dart';
@@ -89,7 +89,7 @@ class _ExploreState extends State<Explore> {
                       MarineCard(imageUrl: 'assets/clownFish.jpg', title: 'Peces', yOffset: -0.5,
                           onTap: () {Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const Category()),
+                            MaterialPageRoute(builder: (context) => const Details()),
                           );}
                       ),
                       MarineCard(imageUrl: 'assets/shark.jpg', title: 'Tiburones', yOffset: -0.8),
