@@ -1,5 +1,5 @@
 import 'package:acuapp/category.dart';
-import 'package:acuapp/details.dart';
+import 'package:acuapp/services/api_service.dart';
 import 'package:acuapp/widgets/marine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_earth_globe/globe_coordinates.dart';
@@ -100,7 +100,12 @@ class _ExploreState extends State<Explore> {
                 ),
 
                 const SizedBox(height: 30),
-
+                ElevatedButton(
+                  onPressed: () async {
+                    await ApiService().testFetch();
+                  },
+                  child: Text('Probar API en Consola'),
+                ),
                 Text(
                   'Océanos del Mundo',
                   style: GoogleFonts.montserrat(
