@@ -84,14 +84,6 @@ class OceanCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Container(
-                        width: 60,
-                        height: 3,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
                     ],
                   ),
                 ),

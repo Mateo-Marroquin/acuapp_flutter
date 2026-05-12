@@ -1,3 +1,4 @@
+import 'package:acuapp/category.dart';
 import 'package:acuapp/details.dart';
 import 'package:acuapp/widgets/marine_card.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,6 @@ class _ExploreState extends State<Explore> {
       _controller.addPoint(
         Point(
           id: ocean['name'].toString(),
-          // Se usa GlobeCoordinates en lugar de LatLng
           coordinates: GlobeCoordinates(ocean['lat'] as double, ocean['lng'] as double),
           label: ocean['name'].toString(),
           isLabelVisible: true,
@@ -89,7 +89,7 @@ class _ExploreState extends State<Explore> {
                       MarineCard(imageUrl: 'assets/clownFish.jpg', title: 'Peces', yOffset: -0.5,
                           onTap: () {Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const Details()),
+                            MaterialPageRoute(builder: (context) => const Category(title: 'Peces',)),
                           );}
                       ),
                       MarineCard(imageUrl: 'assets/shark.jpg', title: 'Tiburones', yOffset: -0.8),
