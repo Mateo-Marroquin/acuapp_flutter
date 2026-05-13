@@ -123,20 +123,43 @@ class _SearchState extends State<Search> {
                         imageUrl: specie.imageUrl,
                         title: specie.commonName,
                         subtitle: specie.scientificName,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Details(
-                                imageUrl: specie.imageUrl,
-                                scientificName: specie.scientificName,
-                                commonName: specie.commonName,
-                                description: specie.description,
-                                order: specie.order,
-                                threatStatus: specie.threatStatus,
-                              ),
-                            ),
+                        onTap: () async {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => const Center(child: CircularProgressIndicator()),
                           );
+
+                          try {
+                            if (specie.description == 'Cargando descripción...') {
+                              final wikiData = await ApiService().fetchWikipedia(specie.scientificName);
+
+                              setState(() {
+                                specie.description = wikiData['description'] ?? 'Sin descripción.';
+                                specie.imageUrl = wikiData['imageUrl'] ?? 'https://picsum.photos/seed/${specie.scientificName}/200';
+                              });
+                            }
+                          } catch (e) {
+                            print("Error al cargar Wikipedia: $e");
+                          } finally {
+                            Navigator.pop(context);
+                          }
+
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Details(
+                                  imageUrl: specie.imageUrl,
+                                  scientificName: specie.scientificName,
+                                  commonName: specie.commonName,
+                                  description: specie.description,
+                                  order: specie.order,
+                                  threatStatus: specie.threatStatus,
+                                ),
+                              ),
+                            );
+                          }
                         },
                       );
                     },
