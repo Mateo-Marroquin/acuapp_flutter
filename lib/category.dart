@@ -34,7 +34,7 @@ class _CategoryState extends State<Category> {
     setState(() => _isLoading = true);
     int taxonKey = oceanRegistry[widget.title] ?? 587;
     
-    final nuevas = await ApiService().fetchRandomMarineSpecies(taxonKey, widget.title ,10);
+    final nuevas = await ApiService().fetchRandomMarineSpecies(taxonKey, widget.title ,20);
 
     repository.updateCategory(widget.title, nuevas);
 
@@ -119,18 +119,43 @@ class _CategoryState extends State<Category> {
             title: pez.commonName,
             subtitle: pez.scientificName,
             imageUrl: pez.imageUrl,
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Details(imageUrl: pez.imageUrl,
-                    scientificName: pez.scientificName,
-                    commonName: pez.commonName,
-                    description: pez.description,
-                    order: pez.order,
-                    threatStatus: pez.threatStatus,),
-                ),
-              )
+            onTap: () async {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const Center(child: CircularProgressIndicator()),
+              );
+
+              try {
+                if (pez.description == 'Cargando descripción...') {
+                  final wikiData = await ApiService().fetchWikipedia(pez.commonName);
+
+                  setState(() {
+                    pez.description = wikiData['description'] ?? 'Sin descripción.';
+                    pez.imageUrl = wikiData['imageUrl'] ?? 'https://picsum.photos/seed/${pez.scientificName}/200';
+                  });
+                }
+              } catch (e) {
+                print("Error al cargar Wikipedia: $e");
+              } finally {
+                Navigator.pop(context);
+              }
+
+              if (mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Details(
+                      imageUrl: pez.imageUrl,
+                      scientificName: pez.scientificName,
+                      commonName: pez.commonName,
+                      description: pez.description,
+                      order: pez.order,
+                      threatStatus: pez.threatStatus,
+                    ),
+                  ),
+                );
+              }
             },
           ),
         );

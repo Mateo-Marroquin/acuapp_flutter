@@ -22,8 +22,6 @@ class ApiService {
         List<MarineSpecie> results = [];
 
         for (var item in data['results']) {
-          await Future.delayed(const Duration(milliseconds: 0));
-          Map<String, String> wikiData = await fetchWikipedia(item['canonicalName']);
 
           String cName = 'No hay nombre común';
           if (item['vernacularNames'] != null &&
@@ -65,8 +63,8 @@ class ApiService {
                   commonName: cName,
                   order: item['order'] ?? item['family'] ??'Orden no encontrada',
                   threatStatus: status != '' ? status : 'DATA_DEFICIENT', //TODO: Agregar mapeo a español
-                  description: wikiData['description'] ?? 'Descripción no disponible',
-                  imageUrl: wikiData['imageUrl'] ?? 'https://picsum.photos/200'
+                  description: 'Cargando descripción...',
+                  imageUrl: 'https://picsum.photos/seed/${item['key']}/200'
               )
           );
         }
