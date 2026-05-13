@@ -137,6 +137,66 @@ class ApiService {
     };
   }
 
+  Future<List<MarineSpecie>> searchSpecies(String query) async {
+    final urlGBIF = Uri.parse(
+        '$_baseUrlGBIF/search?q=$query&rank=SPECIES&status=ACCEPTED&limit=20');
+
+    try {
+      final responseGBIF = await http.get(urlGBIF);
+
+      if (responseGBIF.statusCode == 200) {
+        final data = jsonDecode(responseGBIF.body);
+        List<MarineSpecie> results = [];
+
+        for (var item in data['results']) {
+          String cName = 'No hay nombre común';
+          if (item['vernacularNames'] != null &&
+              item['vernacularNames'] is List &&
+              item['vernacularNames'].isNotEmpty) {
+            final List vNames = item['vernacularNames'];
+            var spaName = vNames.firstWhere(
+                (v) => v['language'] == 'spa',
+                orElse: () => null
+            );
+            var engName = vNames.firstWhere(
+                (v) => v['language'] == 'eng',
+                orElse: () => null
+            );
+            if (spaName != null) {
+              cName = spaName['vernacularName'];
+            } else if (engName != null) {
+              cName = engName['vernacularName'];
+            }
+          }
+
+          String status = '';
+          if (item['threatStatuses'] != null &&
+              item['threatStatuses'] is List &&
+              item['threatStatuses'].isNotEmpty) {
+            status = item['threatStatuses'][0].toString();
+          }
+
+          results.add(
+              MarineSpecie(
+                  scientificName: item['canonicalName'] ?? 'Nombre no encontrado',
+                  commonName: cName,
+                  order: item['order'] ?? item['family'] ?? 'Orden no encontrada',
+                  threatStatus: status != '' ? status : 'DATA_DEFICIENT',
+                  description: 'Cargando descripción...',
+                  imageUrl: 'https://picsum.photos/seed/${item['key']}/200'
+              )
+          );
+        }
+        return results;
+      } else {
+        throw Exception('Error en API GBIF: ${responseGBIF.statusCode}');
+      }
+    } catch (e) {
+      print('Error en búsqueda: $e');
+      return [];
+    }
+  }
+
   Future<int> getOffset(int taxonKey) async {
     final url = 'https://api.gbif.org/v1/species/search?highertaxonKey=$taxonKey&rank=SPECIES&status=ACCEPTED';
 
