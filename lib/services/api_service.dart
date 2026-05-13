@@ -22,7 +22,7 @@ class ApiService {
         List<MarineSpecie> results = [];
 
         for (var item in data['results']) {
-
+          await Future.delayed(const Duration(milliseconds: 0));
           Map<String, String> wikiData = await fetchWikipedia(item['canonicalName']);
 
           String cName = 'No hay nombre común';
@@ -66,7 +66,7 @@ class ApiService {
                   order: item['order'] ?? item['family'] ??'Orden no encontrada',
                   threatStatus: status != '' ? status : 'DATA_DEFICIENT', //TODO: Agregar mapeo a español
                   description: wikiData['description'],
-                  imageUrl: wikiData['imageUrl']
+                  imageUrl: wikiData['imageUrl'] ?? 'https://picsum.photos/200'
               )
           );
         }
@@ -82,47 +82,58 @@ class ApiService {
     }
   }
 
-  Future<Map<String, String>> fetchWikipedia(String name) async {
-    final String cleanName = name.trim().replaceAll(' ', '_');
+  Future<Map<String, String>> fetchWikipedia(String name, {int maxRetries = 3}) async {
 
+    final String cleanName = name.trim().replaceAll(' ', '_');
     final Map<String, String> headers = {
       'User-Agent': 'AcuaApp/1.0 (${dotenv.env['EMAIL']}; Facultad de Ingenieria UASLP)',
       'Accept': 'application/json',
     };
 
-    try {
-      final urlEsp = Uri.parse('https://es.wikipedia.org/api/rest_v1/page/summary/$cleanName');
-      final responseEsp = await http.get(urlEsp, headers: headers);
+    int rand = 0;
+    List<String> languages = ['es', 'en'];
+    for (String lang in languages) {
+      rand = Random().nextInt(10000);
+      for (int i = 0; i < maxRetries; i++) {
+        try {
+          final url = Uri.parse('https://$lang.wikipedia.org/api/rest_v1/page/summary/$cleanName');
+          final response = await http.get(url, headers: headers);
 
-      if (responseEsp.statusCode == 200) {
-        return _processWikiResponse(responseEsp.body);
-      }
+          if (response.statusCode == 200) {
+            return _processWikiResponse(response.body);
+          }
 
-      if (responseEsp.statusCode == 404 || responseEsp.statusCode == 429) {
-        final urlEng = Uri.parse('https://en.wikipedia.org/api/rest_v1/page/summary/$cleanName');
-        final responseEng = await http.get(urlEng, headers: headers);
+          if (response.statusCode == 429) {
+            int waitTime = pow(2, i + 1).toInt();
+            await Future.delayed(Duration(seconds: 0));
+            continue;
+          }
 
-        if (responseEng.statusCode == 200) {
-          return _processWikiResponse(responseEng.body);
+          if (response.statusCode == 404) {
+            break;
+          }
+
+          break;
+
+        } catch (e) {
+          print('Error en intento $i para $lang: $e');
+          if (i == maxRetries - 1) break;
         }
       }
-
-      throw Exception('No se encontró información en ningún idioma');
-
-    } catch (e) {
-      print('Error en Wiki: $e');
-      return {
-        'description': 'Información no disponible por el momento.',
-        'imageUrl': 'https://picsum.photos/200'
-      };
     }
+
+    return {
+      'description': 'Información no disponible por el momento.',
+      'imageUrl': 'https://picsum.photos/seed/{{$rand}}/200/300'
+    };
   }
 
   Map<String, String> _processWikiResponse(String body) {
     final data = jsonDecode(body);
+    int rand = Random().nextInt(10000);
     return {
       'description': data['extract'] ?? 'Sin descripción.',
-      'imageUrl': data['thumbnail']?['source'] ?? 'https://picsum.photos/200',
+      'imageUrl': data['thumbnail']?['source'] ?? 'https://picsum.photos/seed/{{$rand}}/200/300',
     };
   }
 
@@ -147,27 +158,5 @@ class ApiService {
       return 0;
       }
     }
-
-  Future<void> testFetch() async {
-    print('Prueba de API:');
-
-    final results = await fetchRandomMarineSpecies(11418114, 'Tiburones', 10);
-
-    if (results.isEmpty) {
-      print('No se obtuvieron resultados.');
-    } else {
-      print('Se encontraron ${results.length} especies:');
-      for (var specie in results) {
-        print('-----------------------------------');
-        print('Científico: ${specie.scientificName}');
-        print('Común: ${specie.commonName}');
-        print('Orden: ${specie.order}');
-        print('Estado: ${specie.threatStatus}');
-        print('Descripción: ${specie.description}');
-        print('Imagen: ${specie.imageUrl}');
-        print('-----------------------------------');
-      }
-    }
-  }
 
 }
