@@ -1,4 +1,6 @@
+import 'package:acuapp/api/marine_specie.dart';
 import 'package:acuapp/category.dart';
+import 'package:acuapp/details.dart';
 import 'package:acuapp/services/api_service.dart';
 import 'package:acuapp/widgets/marine_card.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,8 @@ import 'package:flutter_earth_globe/point.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_earth_globe/flutter_earth_globe.dart';
 import 'package:flutter_earth_globe/flutter_earth_globe_controller.dart';
-
+import 'package:acuapp/services/firebase_service.dart';
+import 'package:acuapp/data/species_repository.dart';
 import 'constants/colors.dart';
 
 class Explore extends StatefulWidget {
@@ -92,9 +95,24 @@ class _ExploreState extends State<Explore> {
                             MaterialPageRoute(builder: (context) => const Category(title: 'Peces',)),
                           );}
                       ),
-                      MarineCard(imageUrl: 'assets/shark.jpg', title: 'Tiburones', yOffset: -0.8),
-                      MarineCard(imageUrl: 'assets/turtle.jpg', title: 'Tortugas', yOffset: -0.3),
-                      MarineCard(imageUrl: 'assets/octopus.jpg', title: 'Pulpos', yOffset: -0.0),
+                      MarineCard(imageUrl: 'assets/shark.jpg', title: 'Tiburones', yOffset: -0.8,
+                          onTap: () {Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Category(title: 'Tiburones',)),
+                          );}
+                      ),
+                      MarineCard(imageUrl: 'assets/turtle.jpg', title: 'Tortugas', yOffset: -0.3,
+                          onTap: () {Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Category(title: 'Tortugas',)),
+                          );}
+                      ),
+                      MarineCard(imageUrl: 'assets/octopus.jpg', title: 'Pulpos', yOffset: -0.0,
+                          onTap: () {Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Category(title: 'Pulpos',)),
+                          );}
+                      ),
                     ],
                   ),
                 ),
@@ -102,9 +120,20 @@ class _ExploreState extends State<Explore> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () async {
-                    await ApiService().testFetch();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Details(),
+                      ),
+                    );
                   },
                   child: Text('Probar API en Consola'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+
+                  },
+                  child: Text('Probar Firebase'),
                 ),
                 Text(
                   'Océanos del Mundo',

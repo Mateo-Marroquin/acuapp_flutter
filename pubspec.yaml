@@ -40,6 +40,10 @@ dependencies:
   flutter_earth_globe: ^2.2.1
   http:
   flutter_dotenv: ^5.1.0
+  firebase_core: ^4.8.0
+  cloud_firestore: ^6.4.0
+  firebase_analytics: ^12.4.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
