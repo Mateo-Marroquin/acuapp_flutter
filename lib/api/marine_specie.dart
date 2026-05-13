@@ -5,7 +5,7 @@ class MarineSpecie {
   final String threatStatus;
 
   String? description;
-  String? imageUrl;
+  String imageUrl;
 
   MarineSpecie({
     required this.scientificName,
@@ -13,6 +13,6 @@ class MarineSpecie {
     required this.order,
     required this.threatStatus,
     this.description,
-    this.imageUrl,
+    required this.imageUrl,
   });
 }
