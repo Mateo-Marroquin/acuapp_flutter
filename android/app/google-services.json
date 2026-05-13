@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "272620038119",
+    "project_id": "acuapp-uaslp-md",
+    "storage_bucket": "acuapp-uaslp-md.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272620038119:android:ceb0c963e1f82bc989bf42",
+        "android_client_info": {
+          "package_name": "com.example.acuapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmnaIvENbAHiagz5lh4eT61IkO5ThFxtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
