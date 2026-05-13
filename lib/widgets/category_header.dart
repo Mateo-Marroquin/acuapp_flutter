@@ -26,10 +26,18 @@ class CategoryHeader extends StatelessWidget {
         children: [
           if (imageUrl != null)
             Positioned.fill(
-              child: Image.asset(
+              child: Image.network(
                 imageUrl!,
                 fit: BoxFit.cover,
                 alignment: Alignment(yOffset ?? 0.0, 0.0),
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.network(
+                    'https://picsum.photos/110/110',
+                    width: 110,
+                    height: 110,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
 

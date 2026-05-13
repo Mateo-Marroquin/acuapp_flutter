@@ -1,7 +1,6 @@
 import 'package:acuapp/api/marine_specie.dart';
 import 'package:acuapp/category.dart';
 import 'package:acuapp/details.dart';
-import 'package:acuapp/services/api_service.dart';
 import 'package:acuapp/widgets/marine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_earth_globe/globe_coordinates.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_earth_globe/point.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_earth_globe/flutter_earth_globe.dart';
 import 'package:flutter_earth_globe/flutter_earth_globe_controller.dart';
-import 'package:acuapp/services/firebase_service.dart';
 import 'package:acuapp/data/species_repository.dart';
 import 'constants/colors.dart';
 
@@ -120,10 +118,16 @@ class _ExploreState extends State<Explore> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () async {
+                    MarineSpecie data = SpeciesRepository().getSpeciesByCategory('Peces')[0];
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Details(),
+                        builder: (context) => Details(imageUrl: data.imageUrl,
+                          scientificName: data.scientificName,
+                          commonName: data.commonName,
+                          description: data.description,
+                          order: data.order,
+                          threatStatus: data.threatStatus,),
                       ),
                     );
                   },

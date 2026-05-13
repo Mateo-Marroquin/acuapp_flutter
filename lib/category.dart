@@ -2,6 +2,7 @@ import 'package:acuapp/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+import 'details.dart';
 import 'widgets/specie_card.dart';
 import 'constants/colors.dart';
 import 'data/species_repository.dart';
@@ -119,7 +120,17 @@ class _CategoryState extends State<Category> {
             subtitle: pez.scientificName,
             imageUrl: pez.imageUrl,
             onTap: () => {
-              print("Pez seleccionado: ${pez.scientificName}"),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Details(imageUrl: pez.imageUrl,
+                    scientificName: pez.scientificName,
+                    commonName: pez.commonName,
+                    description: pez.description,
+                    order: pez.order,
+                    threatStatus: pez.threatStatus,),
+                ),
+              )
             },
           ),
         );

@@ -4,7 +4,7 @@ class MarineSpecie {
   final String order;
   final String threatStatus;
 
-  String? description;
+  String description;
   String imageUrl;
 
   MarineSpecie({
@@ -12,7 +12,7 @@ class MarineSpecie {
     required this.commonName,
     required this.order,
     required this.threatStatus,
-    this.description,
+    required this.description,
     required this.imageUrl,
   });
 }

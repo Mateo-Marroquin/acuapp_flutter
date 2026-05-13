@@ -65,7 +65,7 @@ class ApiService {
                   commonName: cName,
                   order: item['order'] ?? item['family'] ??'Orden no encontrada',
                   threatStatus: status != '' ? status : 'DATA_DEFICIENT', //TODO: Agregar mapeo a español
-                  description: wikiData['description'],
+                  description: wikiData['description'] ?? 'Descripción no disponible',
                   imageUrl: wikiData['imageUrl'] ?? 'https://picsum.photos/200'
               )
           );
