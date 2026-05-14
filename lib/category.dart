@@ -6,6 +6,7 @@ import 'details.dart';
 import 'widgets/specie_card.dart';
 import 'constants/colors.dart';
 import 'data/species_repository.dart';
+import 'data/user_preferences.dart';
 import 'package:acuapp/constants/taxonIds.dart';
 
 class Category extends StatefulWidget {
@@ -17,6 +18,7 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
+  final UserPreferences _prefs = UserPreferences();
   final repository = SpeciesRepository();
   bool _isLoading = false;
 
@@ -44,55 +46,58 @@ class _CategoryState extends State<Category> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(gradient: AppColors.mainGradient),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
-              CircleAvatar(
-                backgroundColor: Colors.black.withValues(alpha: 0.3),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.pop(context),
-                ),
+    return ListenableBuilder(
+      listenable: _prefs,
+      builder: (context, child) {
+        final isDarkMode = _prefs.isDarkMode;
+        return Container(
+          decoration: BoxDecoration(gradient: AppColors.mainGradient(isDarkMode)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 40),
+                  CircleAvatar(
+                    backgroundColor: AppColors.textColor(isDarkMode).withOpacity(0.2),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: AppColors.textColor(isDarkMode)),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.title,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textColor(isDarkMode),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: cargarDatos,
+                      child: _isLoading ? _buildShimmerList(isDarkMode) : _buildSpeciesList(isDarkMode),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              Text(
-                widget.title,
-                style: GoogleFonts.montserrat(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: cargarDatos,
-                  child: _isLoading
-                      ? _buildShimmerList()
-                      : _buildSpeciesList(),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildShimmerList() {
+  Widget _buildShimmerList(bool isDarkMode) {
     return ListView.builder(
       itemCount: 6,
       itemBuilder: (context, index) => Shimmer.fromColors(
-        baseColor: Colors.white.withOpacity(0.3),
-        highlightColor: Colors.white.withOpacity(0.1),
+        baseColor: AppColors.textColor(isDarkMode).withOpacity(0.1),
+        highlightColor: AppColors.textColor(isDarkMode).withOpacity(0.05),
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
           height: 100,
@@ -105,14 +110,14 @@ class _CategoryState extends State<Category> {
     );
   }
 
-  Widget _buildSpeciesList() {
+  Widget _buildSpeciesList(bool isDarkMode) {
     final listaCategoria = repository.getSpeciesByCategory(widget.title);
     if (listaCategoria.isEmpty) {
-      return const Center(
-          child: Text(
-              "No se encontraron especies",
-              style: TextStyle(color: Colors.white)
-          )
+      return Center(
+        child: Text(
+          "No se encontraron especies",
+          style: TextStyle(color: AppColors.textColor(isDarkMode)),
+        ),
       );
     }
 

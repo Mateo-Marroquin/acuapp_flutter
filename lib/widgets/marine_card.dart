@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:acuapp/data/user_preferences.dart';
+import 'package:acuapp/constants/colors.dart';
 
 class MarineCard extends StatelessWidget {
   final String? imageUrl;
@@ -17,49 +19,66 @@ class MarineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      clipBehavior: Clip.antiAlias,
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 160,
-          width: 140,
-          decoration: BoxDecoration(
-            image: imageUrl != null
-                ? DecorationImage(
-              image: AssetImage(imageUrl!),
-              fit: BoxFit.cover,
-              alignment: Alignment(yOffset, 0.0),
-            )
-                : null,
-            color: Colors.blueGrey,
+    final prefs = UserPreferences();
+    return ListenableBuilder(
+      listenable: prefs,
+      builder: (context, child) {
+        final isDarkMode = prefs.isDarkMode;
+        return Card(
+          color: AppColors.cardColor(isDarkMode),
+          clipBehavior: Clip.antiAlias,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(
+              color: AppColors.textColor(isDarkMode).withOpacity(0.1),
+              width: 1,
+            ),
           ),
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 10.0,
-                      color: Colors.black.withOpacity(0.8),
-                      offset: const Offset(2, 2),
+          child: InkWell(
+            onTap: onTap,
+            child: Container(
+              height: 160,
+              width: 140,
+              decoration: BoxDecoration(
+                image: imageUrl != null
+                    ? DecorationImage(
+                        image: AssetImage(imageUrl!),
+                        fit: BoxFit.cover,
+                        alignment: Alignment(yOffset, 0.0),
+                      )
+                    : null,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.7),
+                    ],
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      title,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

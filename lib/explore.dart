@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_earth_globe/flutter_earth_globe.dart';
 import 'package:flutter_earth_globe/flutter_earth_globe_controller.dart';
 import 'package:acuapp/data/species_repository.dart';
+import 'package:acuapp/data/user_preferences.dart';
 import 'constants/colors.dart';
 
 class Explore extends StatefulWidget {
@@ -20,6 +21,7 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
+  final UserPreferences _prefs = UserPreferences();
   late FlutterEarthGlobeController _controller;
 
   @override
@@ -67,82 +69,88 @@ class _ExploreState extends State<Explore> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(gradient: AppColors.mainGradient),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-                Text(
-                  'Explora',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+    return ListenableBuilder(
+      listenable: _prefs,
+      builder: (context, child) {
+        final isDarkMode = _prefs.isDarkMode;
+        return Container(
+          decoration: BoxDecoration(gradient: AppColors.mainGradient(isDarkMode)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 40),
+                    Text(
+                      'Explora',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textColor(isDarkMode),
+                      ),
+                    ),
 
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      MarineCard(imageUrl: 'assets/clownFish.jpg', title: 'Peces', yOffset: -0.5,
-                          onTap: () {Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const Category(title: 'Peces',)),
-                          );}
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          MarineCard(imageUrl: 'assets/clownFish.jpg', title: 'Peces', yOffset: -0.5,
+                              onTap: () {Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Category(title: 'Peces',)),
+                              );}
+                          ),
+                          MarineCard(imageUrl: 'assets/shark.jpg', title: 'Tiburones', yOffset: -0.8,
+                              onTap: () {Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Category(title: 'Tiburones',)),
+                              );}
+                          ),
+                          MarineCard(imageUrl: 'assets/turtle.jpg', title: 'Tortugas', yOffset: -0.3,
+                              onTap: () {Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Category(title: 'Tortugas',)),
+                              );}
+                          ),
+                          MarineCard(imageUrl: 'assets/octopus.jpg', title: 'Pulpos', yOffset: -0.0,
+                              onTap: () {Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Category(title: 'Pulpos',)),
+                              );}
+                          ),
+                        ],
                       ),
-                      MarineCard(imageUrl: 'assets/shark.jpg', title: 'Tiburones', yOffset: -0.8,
-                          onTap: () {Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const Category(title: 'Tiburones',)),
-                          );}
-                      ),
-                      MarineCard(imageUrl: 'assets/turtle.jpg', title: 'Tortugas', yOffset: -0.3,
-                          onTap: () {Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const Category(title: 'Tortugas',)),
-                          );}
-                      ),
-                      MarineCard(imageUrl: 'assets/octopus.jpg', title: 'Pulpos', yOffset: -0.0,
-                          onTap: () {Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const Category(title: 'Pulpos',)),
-                          );}
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
 
-                const SizedBox(height: 30),
-                Text(
-                  'Océanos del Mundo',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                    const SizedBox(height: 30),
+                    Text(
+                      'Océanos del Mundo',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textColor(isDarkMode),
+                      ),
+                    ),
 
-                Container(
-                  height: 700,
-                  width: double.infinity,
-                  child: FlutterEarthGlobe(
-                    alignment: const Alignment(0, 0),
-                    controller: _controller,
-                    radius: 100,
-                  ),
+                    Container(
+                      height: 700,
+                      width: double.infinity,
+                      child: FlutterEarthGlobe(
+                        alignment: const Alignment(0, 0),
+                        controller: _controller,
+                        radius: 100,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
