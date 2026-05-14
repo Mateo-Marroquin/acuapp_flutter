@@ -43,7 +43,9 @@ class MarineCard extends StatelessWidget {
               decoration: BoxDecoration(
                 image: imageUrl != null
                     ? DecorationImage(
-                        image: AssetImage(imageUrl!),
+                        image: imageUrl!.startsWith('http')
+                            ? NetworkImage(imageUrl!) as ImageProvider
+                            : AssetImage(imageUrl!),
                         fit: BoxFit.cover,
                         alignment: Alignment(yOffset, 0.0),
                       )
@@ -60,7 +62,15 @@ class MarineCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                child: Align(
+                child: imageUrl == null
+                    ? Center(
+                        child: Icon(
+                          Icons.water_drop,
+                          size: 40,
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                      )
+                    : Align(
                   alignment: Alignment.bottomLeft,
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
