@@ -1,6 +1,7 @@
 import 'package:acuapp/api/marine_specie.dart';
 import 'package:acuapp/category.dart';
 import 'package:acuapp/details.dart';
+import 'package:acuapp/oceans.dart';
 import 'package:acuapp/widgets/marine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_earth_globe/globe_coordinates.dart';
@@ -52,8 +53,11 @@ class _ExploreState extends State<Explore> {
           isLabelVisible: true,
           style: PointStyle(color: Colors.cyanAccent.withOpacity(0.2), size: 20),
           onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Océano ${ocean['name']} seleccionado')),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Oceano(oceanName: ocean['name'].toString()),
+              ),
             );
           },
         ),

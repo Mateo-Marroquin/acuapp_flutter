@@ -28,4 +28,16 @@ class SpeciesRepository {
     favorites.retainWhere((x) => ids.remove(x.scientificName));
     return favorites;
   }
+
+  List<MarineSpecie> getRandomSpecies(int count) {
+    List<MarineSpecie> all = [];
+    _allSpecies.forEach((key, list) {
+      all.addAll(list);
+    });
+    
+    if (all.isEmpty) return [];
+    
+    all.shuffle();
+    return all.take(count).toList();
+  }
 }
