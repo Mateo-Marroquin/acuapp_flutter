@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:acuapp/explore.dart';
 import 'package:acuapp/search.dart';
+import 'package:acuapp/profile.dart';
 
 class NavigatorApp extends StatefulWidget {
   const NavigatorApp({super.key});
@@ -15,7 +16,7 @@ class _NavigatorAppState extends State<NavigatorApp> {
   final List<Widget> _pages = [
     const Explore(),
     const Search(),
-    const Center(child: Text('Perfil')), // Placeholder
+    const Profile(),
   ];
 
   @override

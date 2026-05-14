@@ -18,4 +18,14 @@ class SpeciesRepository {
   List<MarineSpecie> getSpeciesByCategory(String categoryName) {
     return _allSpecies[categoryName] ?? [];
   }
+
+  List<MarineSpecie> getAllFavorites() {
+    List<MarineSpecie> favorites = [];
+    _allSpecies.forEach((key, list) {
+      favorites.addAll(list.where((specie) => specie.isFavorite));
+    });
+    final ids = favorites.map((e) => e.scientificName).toSet();
+    favorites.retainWhere((x) => ids.remove(x.scientificName));
+    return favorites;
+  }
 }
