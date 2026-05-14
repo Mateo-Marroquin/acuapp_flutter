@@ -120,24 +120,6 @@ class _ExploreState extends State<Explore> {
                 ),
 
                 const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () async {
-                    MarineSpecie data = SpeciesRepository().getSpeciesByCategory('Peces')[0];
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Details(specie: data,),
-                      ),
-                    );
-                  },
-                  child: Text('Probar API en Consola'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-
-                  },
-                  child: Text('Probar Firebase'),
-                ),
                 Text(
                   'Océanos del Mundo',
                   style: GoogleFonts.montserrat(

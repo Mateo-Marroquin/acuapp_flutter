@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:acuapp/explore.dart';
 import 'package:acuapp/search.dart';
 import 'package:acuapp/profile.dart';
+import 'dart:ui';
+import 'package:acuapp/constants/colors.dart';
 
 class NavigatorApp extends StatefulWidget {
   const NavigatorApp({super.key});
@@ -22,20 +24,70 @@ class _NavigatorAppState extends State<NavigatorApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: _pages[_selectedIndex],
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explorar'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.fromLTRB(10, 0, 10, 30),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 10),
+            child: Container(
+              height: 95,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.2),
+                  width: 1.5,
+                ),
+              ),
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  canvasColor: Colors.transparent,
+                ),
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  elevation: 0,
+                  iconSize: 22,
+                  backgroundColor: Colors.transparent,
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: Colors.white,
+                  unselectedItemColor: Colors.white54,
+                  showSelectedLabels: true,
+                  showUnselectedLabels: false,
+                  selectedLabelStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                    height: 1,
+                  ),
+                  onTap: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.explore_outlined),
+                      activeIcon: Icon(Icons.explore),
+                      label: 'Explorar',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.search_outlined),
+                      activeIcon: Icon(Icons.search),
+                      label: 'Buscar',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person_outline),
+                      activeIcon: Icon(Icons.person),
+                      label: 'Perfil',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
