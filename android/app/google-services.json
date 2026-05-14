@@ -12,7 +12,20 @@
           "package_name": "com.example.acuapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "272620038119-aakacdonbgfr18vvp47s0qc3aht7gb62.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.acuapp",
+            "certificate_hash": "8d34fd409ad032f2ee070c046caf0cca15cf0a8d"
+          }
+        },
+        {
+          "client_id": "272620038119-1raller6vil38di75c0cvchbbivtkkbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAmnaIvENbAHiagz5lh4eT61IkO5ThFxtw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272620038119-1raller6vil38di75c0cvchbbivtkkbm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

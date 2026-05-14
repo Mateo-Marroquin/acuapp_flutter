@@ -6,6 +6,7 @@ import 'package:acuapp/widgets/specie_card.dart';
 import 'package:acuapp/details.dart';
 import 'package:acuapp/data/species_repository.dart';
 import 'dart:ui';
+import 'package:acuapp/services/auth_service.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -138,15 +139,20 @@ class _ProfileState extends State<Profile> {
               CircleAvatar(
                 radius: 50,
                 backgroundColor: AppColors.color4.withValues(alpha: 0.3),
-                child: const Icon(
-                  Icons.person,
-                  size: 60,
-                  color: Colors.white,
-                ),
+                backgroundImage: AuthService().userPhotoUrl != null
+                    ? NetworkImage(AuthService().userPhotoUrl!)
+                    : null,
+                child: AuthService().userPhotoUrl == null
+                    ? const Icon(
+                        Icons.person,
+                        size: 60,
+                        color: Colors.white,
+                      )
+                    : null,
               ),
               const SizedBox(height: 15),
               Text(
-                'Explorador Marino',
+                AuthService().userName ?? 'Nombre de Usuario',
                 style: GoogleFonts.montserrat(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -154,7 +160,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               Text(
-                'miembro@acuapp.com',
+                AuthService().userEmail ?? 'Correo',
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
                   color: Colors.white70,

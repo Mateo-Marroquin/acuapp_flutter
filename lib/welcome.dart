@@ -4,6 +4,8 @@ import 'package:acuapp/constants/colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:acuapp/services/auth_service.dart';
+
 
 class Welcome extends StatelessWidget {
   const Welcome({super.key});
@@ -87,7 +89,7 @@ class Welcome extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Padding(
+                      /*Padding(
                         padding: const EdgeInsets.only(top: 40, bottom: 20),
                         child: ElevatedButton(
                           onPressed: () {
@@ -110,7 +112,7 @@ class Welcome extends StatelessWidget {
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
+                      ),*/
 
                       Container(
                         margin: const EdgeInsets.only(bottom: 30),
@@ -129,7 +131,20 @@ class Welcome extends StatelessWidget {
                           icon: const FaIcon(FontAwesomeIcons.google),
                           color: const Color(0xFFDB4437),
                           iconSize: 25,
-                          onPressed: () => print("Login con Google"),
+                          onPressed: () async {
+                            final user = await AuthService().signInWithGoogle();
+                            if (user != null && context.mounted) {
+                              print(AuthService().currentUser);
+                              print(AuthService().userName);
+                              print(AuthService().userEmail);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const NavigatorApp(),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
 
