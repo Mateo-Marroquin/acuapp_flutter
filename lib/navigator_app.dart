@@ -5,6 +5,7 @@ import 'package:acuapp/profile.dart';
 import 'dart:ui';
 import 'package:acuapp/constants/colors.dart';
 import 'package:acuapp/data/user_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NavigatorApp extends StatefulWidget {
   const NavigatorApp({super.key});
@@ -33,63 +34,37 @@ class _NavigatorAppState extends State<NavigatorApp> {
           extendBody: true,
           body: _pages[_selectedIndex],
           bottomNavigationBar: Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 10, 30),
+            margin: const EdgeInsets.fromLTRB(15, 0, 15, 30),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(35),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 15, sigmaY: 10),
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: Container(
-                  height: 95,
+                  height: 85,
                   decoration: BoxDecoration(
-                    color: AppColors.cardColor(isDarkMode),
-                    borderRadius: BorderRadius.circular(30),
+                    color: isDarkMode 
+                        ? Colors.black.withOpacity(0.5) 
+                        : Colors.white.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(35),
                     border: Border.all(
-                      color: AppColors.textColor(isDarkMode).withOpacity(0.2),
+                      color: AppColors.textColor(isDarkMode).withOpacity(0.15),
                       width: 1.5,
                     ),
-                  ),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      canvasColor: Colors.transparent,
-                    ),
-                    child: BottomNavigationBar(
-                      type: BottomNavigationBarType.fixed,
-                      elevation: 0,
-                      iconSize: 22,
-                      backgroundColor: Colors.transparent,
-                      currentIndex: _selectedIndex,
-                      selectedItemColor: AppColors.textColor(isDarkMode),
-                      unselectedItemColor: AppColors.subTextColor(isDarkMode),
-                      showSelectedLabels: true,
-                      showUnselectedLabels: false,
-                      selectedLabelStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        height: 1,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
                       ),
-                      onTap: (index) {
-                        setState(() {
-                          _selectedIndex = index;
-                        });
-                      },
-                      items: const [
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.explore_outlined),
-                          activeIcon: Icon(Icons.explore),
-                          label: 'Explorar',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.search_outlined),
-                          activeIcon: Icon(Icons.search),
-                          label: 'Buscar',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.person_outline),
-                          activeIcon: Icon(Icons.person),
-                          label: 'Perfil',
-                        ),
-                      ],
-                    ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildNavItem(0, Icons.explore_outlined, Icons.explore, 'Explorar', isDarkMode),
+                      _buildNavItem(1, Icons.search_outlined, Icons.search, 'Buscar', isDarkMode),
+                      _buildNavItem(2, Icons.person_outline, Icons.person, 'Perfil', isDarkMode),
+                    ],
                   ),
                 ),
               ),
@@ -97,6 +72,44 @@ class _NavigatorAppState extends State<NavigatorApp> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildNavItem(int index, IconData icon, IconData activeIcon, String label, bool isDarkMode) {
+    final isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedIndex = index),
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected 
+              ? AppColors.textColor(isDarkMode).withOpacity(0.12) 
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isSelected ? activeIcon : icon,
+              color: isSelected ? AppColors.textColor(isDarkMode) : AppColors.subTextColor(isDarkMode),
+              size: 26,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: GoogleFonts.montserrat(
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected ? AppColors.textColor(isDarkMode) : AppColors.subTextColor(isDarkMode),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
