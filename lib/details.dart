@@ -2,23 +2,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:acuapp/constants/colors.dart';
+import 'package:acuapp/api/marine_specie.dart';
 
 class Details extends StatefulWidget {
-  final String scientificName;
-  final String commonName;
-  final String order;
-  final String threatStatus;
-  final String description;
-  final String imageUrl;
+  final MarineSpecie specie;
 
   const Details({
     super.key,
-    required this.scientificName,
-    required this.commonName,
-    required this.order,
-    required this.threatStatus,
-    required this.description,
-    required this.imageUrl,
+    required this.specie,
   });
 
   @override
@@ -26,6 +17,30 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
+  late bool _isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.specie.isFavorite;
+  }
+
+  void _toggleFavorite() {
+    setState(() {
+      print(widget.specie.isFavorite);
+      _isFavorite = !_isFavorite;
+      widget.specie.isFavorite = _isFavorite;
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_isFavorite ? 'Agregado a favoritos' : 'Eliminado de favoritos'),
+        duration: const Duration(seconds: 1),
+        backgroundColor: AppColors.color2,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,14 +62,29 @@ class _DetailsState extends State<Details> {
                 ),
               ),
             ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.black.withValues(alpha: 0.3),
+                  child: IconButton(
+                    icon: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: _isFavorite ? Colors.redAccent : Colors.white,
+                    ),
+                    onPressed: _toggleFavorite,
+                  ),
+                ),
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
                 children: [
                   Hero(
-                    tag: widget.imageUrl,
+                    tag: widget.specie.imageUrl,
                     child: Image.network(
-                      widget.imageUrl,
+                      widget.specie.imageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           Image.network('https://picsum.photos/400/800', fit: BoxFit.cover),
@@ -77,6 +107,7 @@ class _DetailsState extends State<Details> {
               ),
             ),
           ),
+
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -84,8 +115,9 @@ class _DetailsState extends State<Details> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
+                  // Nombres
                   Text(
-                    widget.commonName,
+                    widget.specie.commonName,
                     style: GoogleFonts.montserrat(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -93,7 +125,7 @@ class _DetailsState extends State<Details> {
                     ),
                   ),
                   Text(
-                    widget.scientificName,
+                    widget.specie.scientificName,
                     style: GoogleFonts.montserrat(
                       fontSize: 18,
                       fontStyle: FontStyle.italic,
@@ -102,20 +134,22 @@ class _DetailsState extends State<Details> {
                     ),
                   ),
                   const SizedBox(height: 25),
+
                   Row(
                     children: [
-                      _buildInfoChip(Icons.category_outlined, widget.order),
+                      _buildInfoChip(Icons.category_outlined, widget.specie.order),
                       const SizedBox(width: 10),
-                      _buildThreatChip(widget.threatStatus),
+                      _buildThreatChip(widget.specie.threatStatus),
                     ],
                   ),
                   
                   const SizedBox(height: 30),
+
                   _buildSectionTitle('Sobre esta especie'),
                   const SizedBox(height: 12),
                   _buildGlassCard(
                     child: Text(
-                      widget.description,
+                      widget.specie.description,
                       style: GoogleFonts.montserrat(
                         fontSize: 16,
                         color: Colors.white.withValues(alpha: 0.9),
@@ -125,17 +159,17 @@ class _DetailsState extends State<Details> {
                   ),
                   
                   const SizedBox(height: 30),
-
+                  
                   _buildSectionTitle('Detalles Técnicos'),
                   const SizedBox(height: 12),
                   _buildGlassCard(
                     child: Column(
                       children: [
-                        _buildDetailRow(Icons.label_important_outline, 'Orden', widget.order),
+                        _buildDetailRow(Icons.label_important_outline, 'Orden', widget.specie.order),
                         const Divider(color: Colors.white10),
-                        _buildDetailRow(Icons.security_outlined, 'Estado IUCN', widget.threatStatus),
+                        _buildDetailRow(Icons.security_outlined, 'Estado IUCN', widget.specie.threatStatus),
                         const Divider(color: Colors.white10),
-                        _buildDetailRow(Icons.biotech_outlined, 'Nombre Científico', widget.scientificName),
+                        _buildDetailRow(Icons.biotech_outlined, 'Nombre Científico', widget.specie.scientificName),
                       ],
                     ),
                   ),
@@ -267,9 +301,9 @@ class _DetailsState extends State<Details> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: color.withOpacity(0.4), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.4), width: 1),
       ),
       child: Text(
         label,

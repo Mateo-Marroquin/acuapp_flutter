@@ -6,6 +6,7 @@ class MarineSpecie {
 
   String description;
   String imageUrl;
+  bool isFavorite;
 
   MarineSpecie({
     required this.scientificName,
@@ -14,5 +15,6 @@ class MarineSpecie {
     required this.threatStatus,
     required this.description,
     required this.imageUrl,
+    this.isFavorite = false,
   });
 }

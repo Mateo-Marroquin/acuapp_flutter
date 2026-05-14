@@ -122,12 +122,7 @@ class _ExploreState extends State<Explore> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Details(imageUrl: data.imageUrl,
-                          scientificName: data.scientificName,
-                          commonName: data.commonName,
-                          description: data.description,
-                          order: data.order,
-                          threatStatus: data.threatStatus,),
+                        builder: (context) => Details(specie: data,),
                       ),
                     );
                   },

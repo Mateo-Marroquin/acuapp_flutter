@@ -49,11 +49,19 @@ class _CategoryState extends State<Category> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 40),
+              CircleAvatar(
+                backgroundColor: Colors.black.withValues(alpha: 0.3),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              const SizedBox(height: 10),
               Text(
                 widget.title,
                 style: GoogleFonts.montserrat(
@@ -146,12 +154,7 @@ class _CategoryState extends State<Category> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => Details(
-                      imageUrl: pez.imageUrl,
-                      scientificName: pez.scientificName,
-                      commonName: pez.commonName,
-                      description: pez.description,
-                      order: pez.order,
-                      threatStatus: pez.threatStatus,
+                      specie: pez,
                     ),
                   ),
                 );

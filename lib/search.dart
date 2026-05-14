@@ -150,12 +150,7 @@ class _SearchState extends State<Search> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => Details(
-                                  imageUrl: specie.imageUrl,
-                                  scientificName: specie.scientificName,
-                                  commonName: specie.commonName,
-                                  description: specie.description,
-                                  order: specie.order,
-                                  threatStatus: specie.threatStatus,
+                                  specie: specie,
                                 ),
                               ),
                             );
