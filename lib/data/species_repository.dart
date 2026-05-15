@@ -12,11 +12,37 @@ class SpeciesRepository {
   final Map<String, List<MarineSpecie>> _allSpecies = {};
 
   void updateCategory(String categoryName, List<MarineSpecie> newSpecies) {
-    _allSpecies[categoryName] = newSpecies;
+    final syncedList = newSpecies.map((s) => syncSpecie(s)).toList();
+    _allSpecies[categoryName] = syncedList;
   }
 
   List<MarineSpecie> getSpeciesByCategory(String categoryName) {
     return _allSpecies[categoryName] ?? [];
+  }
+
+  void addSpecies(MarineSpecie specie) {
+    for (var list in _allSpecies.values) {
+      if (list.any((s) => s.scientificName == specie.scientificName)) {
+        return;
+      }
+    }
+    
+    if (!_allSpecies.containsKey('Search')) {
+      _allSpecies['Search'] = [];
+    }
+    _allSpecies['Search']!.add(specie);
+  }
+
+  MarineSpecie syncSpecie(MarineSpecie specie) {
+    for (var list in _allSpecies.values) {
+      for (var s in list) {
+        if (s.scientificName == specie.scientificName) {
+          return s;
+        }
+      }
+    }
+    addSpecies(specie);
+    return specie;
   }
 
   List<MarineSpecie> getAllFavorites() {

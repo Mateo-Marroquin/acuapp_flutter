@@ -155,7 +155,7 @@ class _CategoryState extends State<Category> {
               }
 
               if (mounted) {
-                Navigator.push(
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Details(
@@ -163,6 +163,7 @@ class _CategoryState extends State<Category> {
                     ),
                   ),
                 );
+                setState(() {});
               }
             },
           ),

@@ -7,6 +7,7 @@ import 'package:acuapp/details.dart';
 import 'package:acuapp/services/api_service.dart';
 import 'dart:ui';
 import 'package:acuapp/data/user_preferences.dart';
+import 'package:acuapp/data/species_repository.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -17,6 +18,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final UserPreferences _prefs = UserPreferences();
+  final SpeciesRepository _repository = SpeciesRepository();
   final TextEditingController _searchController = TextEditingController();
   final ApiService _apiService = ApiService();
   List<MarineSpecie> _searchResults = [];
@@ -37,7 +39,7 @@ class _SearchState extends State<Search> {
     try {
       final results = await _apiService.searchSpecies(query);
       setState(() {
-        _searchResults = results;
+        _searchResults = results.map((s) => _repository.syncSpecie(s)).toList();
       });
     } catch (e) {
       print('Error buscando: $e');
@@ -144,12 +146,13 @@ class _SearchState extends State<Search> {
                                     Navigator.pop(context);
                                   }
                                   if (mounted) {
-                                    Navigator.push(
+                                    await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => Details(specie: specie),
                                       ),
                                     );
+                                    setState(() {});
                                   }
                                 },
                               )),

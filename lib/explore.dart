@@ -98,28 +98,40 @@ class _ExploreState extends State<Explore> {
                       child: Row(
                         children: [
                           MarineCard(imageUrl: 'assets/clownFish.jpg', title: 'Peces', yOffset: -0.5,
-                              onTap: () {Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const Category(title: 'Peces',)),
-                              );}
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Category(title: 'Peces',)),
+                                );
+                                setState(() {});
+                              }
                           ),
                           MarineCard(imageUrl: 'assets/shark.jpg', title: 'Tiburones', yOffset: -0.8,
-                              onTap: () {Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const Category(title: 'Tiburones',)),
-                              );}
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Category(title: 'Tiburones',)),
+                                );
+                                setState(() {});
+                              }
                           ),
                           MarineCard(imageUrl: 'assets/turtle.jpg', title: 'Tortugas', yOffset: -0.3,
-                              onTap: () {Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const Category(title: 'Tortugas',)),
-                              );}
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Category(title: 'Tortugas',)),
+                                );
+                                setState(() {});
+                              }
                           ),
                           MarineCard(imageUrl: 'assets/octopus.jpg', title: 'Pulpos', yOffset: -0.0,
-                              onTap: () {Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const Category(title: 'Pulpos',)),
-                              );}
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Category(title: 'Pulpos',)),
+                                );
+                                setState(() {});
+                              }
                           ),
                         ],
                       ),
